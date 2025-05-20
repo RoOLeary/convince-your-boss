@@ -115,12 +115,18 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.search-result-item').forEach(item => {
           item.addEventListener('click', function() {
             const domain = this.dataset.domain;
-            searchInput.value = this.querySelector('.company-name').textContent;
+            const companyName = this.querySelector('.company-name').textContent;
+            searchInput.value = companyName;
             resultsContainer.style.display = 'none';
-            // You can add a custom event here if you want to notify other components
-            window.dispatchEvent(new CustomEvent('companySelected', { 
-              detail: { domain, name: searchInput.value }
-            }));
+            
+            // Redirect to your React application with the selected company data
+            const params = new URLSearchParams({
+              company: companyName,
+              domain: domain
+            });
+            
+            // Replace this URL with your actual React application URL
+            window.location.href = `https://your-react-app.com/analyze?${params.toString()}`;
           });
         });
 

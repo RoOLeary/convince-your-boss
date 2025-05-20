@@ -1,0 +1,80 @@
+<!-- React App Embed Component -->
+<div class="react-app-container">
+  <iframe 
+    id="reactAppFrame"
+    class="react-app-frame"
+    src="https://your-react-app-url.com"
+    title="Company Analysis App"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
+</div>
+
+<style>
+.react-app-container {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Full viewport height */
+  min-height: 600px; /* Minimum height */
+  overflow: hidden;
+}
+
+.react-app-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+/* Optional: Add a loading state */
+.react-app-container::before {
+  content: "Loading...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #666;
+  z-index: 1;
+  display: none;
+}
+
+.react-app-container.loading::before {
+  display: block;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.querySelector('.react-app-container');
+  const iframe = document.getElementById('reactAppFrame');
+  
+  // Show loading state
+  container.classList.add('loading');
+  
+  // Handle iframe load
+  iframe.addEventListener('load', function() {
+    container.classList.remove('loading');
+    
+    // Optional: Handle communication between Webflow and React app
+    window.addEventListener('message', function(event) {
+      // Verify the origin of the message
+      if (event.origin !== "https://your-react-app-url.com") return;
+      
+      // Handle messages from your React app
+      if (event.data.type === 'resize') {
+        // Handle iframe resize requests
+        iframe.style.height = event.data.height + 'px';
+      }
+    });
+  });
+
+  // Optional: Handle iframe errors
+  iframe.addEventListener('error', function() {
+    container.innerHTML = '<div style="padding: 20px; text-align: center;">Failed to load the application. Please try refreshing the page.</div>';
+  });
+});
+</script> 
